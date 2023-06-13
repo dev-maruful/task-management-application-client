@@ -40,10 +40,8 @@ const Navbar = () => {
             {navItems}
           </ul>
         </div>
-        <Link to="/">
-          <a className="btn btn-ghost normal-case text-3xl font-bold">
-            Task Management
-          </a>
+        <Link to="/" className="btn btn-ghost normal-case text-3xl font-bold">
+          Task Management
         </Link>
       </div>
       <div className="navbar-end hidden lg:flex">
