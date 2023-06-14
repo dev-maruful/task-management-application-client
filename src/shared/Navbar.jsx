@@ -1,14 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
   const navItems = (
     <>
       <li>
-        <Link to="/">Add a task</Link>
+        <NavLink to="/">Add a task</NavLink>
       </li>
       <li>
-        <Link to="/tasklists">task lists</Link>
+        <NavLink to="/tasklists">task lists</NavLink>
       </li>
     </>
   );

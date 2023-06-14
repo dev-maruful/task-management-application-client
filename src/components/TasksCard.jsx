@@ -4,8 +4,10 @@ const TasksCard = ({ task, handleDelete, handleUpdate }) => {
   const { taskTitle, status, description, _id } = task;
   return (
     <div
-      className={`card bg-primary text-primary-content ${
-        status === "completed" && "bg-base-300 text-black"
+      className={`card ${
+        status === "completed"
+          ? "bg-gray-100 text-black"
+          : "bg-primary text-primary-content"
       }`}
     >
       <div className="card-body">
@@ -34,7 +36,7 @@ const TasksCard = ({ task, handleDelete, handleUpdate }) => {
               onClick={() => handleUpdate(_id)}
               className="btn btn-sm btn-success"
             >
-              mark as read
+              mark as completed
             </button>
           </div>
           <div className="card-actions">

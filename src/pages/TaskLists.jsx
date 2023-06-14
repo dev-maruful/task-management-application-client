@@ -48,7 +48,7 @@ const TaskLists = () => {
       <h3 className="text-center text-3xl font-bold mb-10">
         All Tasks : {allTasks.length}
       </h3>
-      <div className="grid grid-cols-3 gap-10">
+      <div className="grid md:grid-cols-3 mx-5 md:mx-0 gap-10">
         {allTasks.map((task) => (
           <TasksCard
             key={task?._id}
