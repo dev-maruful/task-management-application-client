@@ -8,14 +8,16 @@ const AddATaskForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    data.status = "pending";
     axiosSecure.post("/tasks", data).then((data) => {
       if (data?.data?.insertedId) {
         toast.success("Task added successfully");
+        reset();
       } else if (data?.data?.message) {
         toast.error(data?.data?.message);
       }
@@ -29,43 +31,28 @@ const AddATaskForm = () => {
           <h1 className="text-5xl font-bold">Add A Task!</h1>
         </div>
         <div className="card flex-shrink-0 w-full shadow-2xl bg-base-100">
-          <form onSubmit={handleSubmit(onSubmit)} className="card-body">
-            <div className="flex gap-5">
-              {" "}
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text text-lg font-medium">
-                    Task Title
-                  </span>
-                </label>
-                <input
-                  {...register("taskTitle", { required: true })}
-                  type="text"
-                  placeholder="task title"
-                  className="input input-bordered"
-                />
-                {errors.taskTitle?.type === "required" && (
-                  <p className="text-error" role="alert">
-                    Task title is required
-                  </p>
-                )}
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text text-lg font-medium">Status</span>
-                </label>
-                <input
-                  {...register("status", { required: true })}
-                  type="text"
-                  placeholder="status"
-                  className="input input-bordered"
-                />
-                {errors.status?.type === "required" && (
-                  <p className="text-error" role="alert">
-                    Status is required
-                  </p>
-                )}
-              </div>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="card-body min-w-80"
+          >
+            {" "}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text text-lg font-medium">
+                  Task Title
+                </span>
+              </label>
+              <input
+                {...register("taskTitle", { required: true })}
+                type="text"
+                placeholder="task title"
+                className="input input-bordered"
+              />
+              {errors.taskTitle?.type === "required" && (
+                <p className="text-error" role="alert">
+                  Task title is required
+                </p>
+              )}
             </div>
             <div className="form-control">
               <label className="label">
@@ -85,7 +72,7 @@ const AddATaskForm = () => {
               )}
             </div>
             <div className="form-control mt-6">
-              <button className="btn btn-warning btn-outline">Add</button>
+              <button className="btn btn-warning">Add</button>
             </div>
           </form>
         </div>
