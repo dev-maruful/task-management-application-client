@@ -2,23 +2,43 @@ import React, { useEffect, useState } from "react";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import TasksCard from "../components/TasksCard";
 import { toast } from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 
 const TaskLists = () => {
   const axiosSecure = useAxiosSecure();
-  const [allTasks, setAllTasks] = useState([]);
 
-  useEffect(() => {
-    axiosSecure("/tasks").then((data) => {
-      setAllTasks(data?.data);
-    });
-  }, []);
+  const { data: allTasks = [], refetch } = useQuery(["allTasks"], async () => {
+    const res = await axiosSecure("/tasks");
+    return res.data;
+  });
 
   const handleDelete = (id) => {
-    axiosSecure.delete(`/tasks/${id}`).then((data) => {
-      if (data?.data?.deletedCount > 0) {
-        toast.success("Task deleted successfully");
-        const remaining = allTasks.filter((task) => task._id !== id);
-        setAllTasks(remaining);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/tasks/${id}`).then((data) => {
+          if (data?.data?.deletedCount > 0) {
+            Swal.fire("Deleted!", "Your task has been deleted.", "success");
+            refetch();
+          }
+        });
+      }
+    });
+  };
+
+  const handleUpdate = (id) => {
+    axiosSecure.patch(`/tasks/${id}`).then((data) => {
+      if (data?.data?.modifiedCount > 0) {
+        toast.success("Task updated to read successfully");
+        refetch();
       }
     });
   };
@@ -34,6 +54,7 @@ const TaskLists = () => {
             key={task?._id}
             task={task}
             handleDelete={handleDelete}
+            handleUpdate={handleUpdate}
           ></TasksCard>
         ))}
       </div>
